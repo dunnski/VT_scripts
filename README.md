@@ -1,2 +1,2 @@
 # VT_scripts
- Collection of VT scripts I use
+ Collection of VT scripts I've been starting to use.  

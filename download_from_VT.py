@@ -20,11 +20,15 @@ home_directory = os.path.expanduser('~')
 # Construct the path to the desktop
 desktop_path = os.path.join(home_directory, 'Desktop')
 # ***Make sure you change the name of the destination folder you want to store files in***
-dest_path = os.path.join(home_directory, 'Desktop/Crowdstrike_Efficacy_Test/Windows')
+dest_folder_name = input("Name of folder to write to: ")
+# Example: 'Desktop/Crowdstrike_Efficacy_Test/Windows'
+dest_path = os.path.join(home_directory, dest_folder_name)
 
 # Set the CSV file path to 'your_csv_file.csv' on the desktop
 #***CHANGE THE CSV TO USE***
-CSV_FILE_PATH = os.path.join(desktop_path, 'Windows_hashes_to_download.csv')
+csv_with_hashes = input("CSV file you want to use: ")
+# Example: 'Windows_hashes_to_download.csv'
+CSV_FILE_PATH = os.path.join(desktop_path, csv_with_hashes)
 
 # Function to download a file from VirusTotal
 def download_file_from_virustotal(malware_name, file_hash):
