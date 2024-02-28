@@ -6,7 +6,7 @@ home_directory = os.path.expanduser('~')
 # Construct the path to the desktop
 desktop_path = os.path.join(home_directory, 'Desktop')
 # ***Make sure you change the name of the destination folder you want to store files in***
-parent_folder_path = os.path.join(home_directory, 'Desktop/Crowdstrike_Efficacy_Test/')
+parent_folder_path = os.path.join(home_directory, 'Desktop/Linux_Samples/')
 
 def append_nops_to_executable(file_path, num_nops, output_file):
     nop = b'\x90'  # NOP opcode in x86 assembly
@@ -39,7 +39,7 @@ def process_folder(target_folder, num_nops):
             append_nops_to_executable(file, num_nops, output_file)
 
 # Example usage
-target_folder = os.path.join(parent_folder_path, 'Windows/Cobalt Strike/')  # Replace with the path to your target folder
+target_folder = os.path.join(parent_folder_path, 'RansomEXX/')  # Replace with the path to your target folder
 num_nops = 10  # Number of NOP bytes to append
 
 process_folder(target_folder, num_nops)
