@@ -1,12 +1,6 @@
 import os
 from pathlib import Path
-
-# Get the home directory of the current user
-home_directory = os.path.expanduser('~')
-# Construct the path to the desktop
-desktop_path = os.path.join(home_directory, 'Desktop')
-# ***Make sure you change the name of the destination folder you want to store files in***
-parent_folder_path = os.path.join(home_directory, 'Desktop/MRO_testing/Windows')
+import argparse
 
 def append_nops_to_executable(file_path, num_nops, output_file):
     nop = b'\x90'  # NOP opcode in x86 assembly
@@ -23,23 +17,49 @@ def append_nops_to_executable(file_path, num_nops, output_file):
         print(f"Error: {e}")
 
 def process_folder(target_folder, num_nops):
-    # Ensure the target folder is a Path object for easier path manipulations
     target_folder = Path(target_folder)
     modded_folder = target_folder / "modded"
 
-    # Create the modded directory if it does not exist
     if not modded_folder.exists():
         modded_folder.mkdir()
 
-    # Iterate over every file in the target folder
     for file in target_folder.iterdir():
-        if file.is_file():  # Make sure to skip directories
-            # Construct the output file path
+        if file.is_file():
             output_file = modded_folder / f"{file.stem}_modded{file.suffix}"
             append_nops_to_executable(file, num_nops, output_file)
 
-# Example usage
-target_folder = os.path.join(parent_folder_path, 'NanoCore')  # Replace with the path to your target folder
-num_nops = 10  # Number of NOP bytes to append
+def process_single_file(file_path, num_nops):
+    file = Path(file_path)
+    output_file = file.parent / f"{file.stem}_modded{file.suffix}"
+    append_nops_to_executable(file, num_nops, output_file)
 
-process_folder(target_folder, num_nops)
+def main():
+    parser = argparse.ArgumentParser(
+        description="Append NOPs to executables.",
+        epilog="""
+        Examples of usage:
+        
+        To process an entire folder:
+          python pad_binary.py /path/to/target_folder --num_nops 15
+
+        To process a single file:
+          python pad_binary.py /path/to/target_file --num_nops 15 --single_file
+        """
+    )
+    parser.add_argument("target_path", type=str, help="Path to the target folder or file.")
+    parser.add_argument("--num_nops", type=int, default=10, help="Number of NOP bytes to append. Default is 10.")
+    parser.add_argument("--single_file", action="store_true", help="Process a single file instead of a folder.")
+    
+    args = parser.parse_args()
+    
+    target_path = args.target_path
+    num_nops = args.num_nops
+    single_file = args.single_file
+
+    if single_file:
+        process_single_file(target_path, num_nops)
+    else:
+        process_folder(target_path, num_nops)
+
+if __name__ == "__main__":
+    main()
