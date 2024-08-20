@@ -16,7 +16,18 @@ API_KEY = os.getenv("vti_api_key")
 API_URL = 'https://www.virustotal.com/api/v3/files/{}'
 
 # Parse command line arguments
-parser = argparse.ArgumentParser(description='Download files from VirusTotal based on a CSV of hashes or a single hash.')
+parser = argparse.ArgumentParser(
+    description='Download files from VirusTotal based on a CSV of hashes or a single hash.',
+    epilog="""
+    Examples of usage:
+
+    To download files using a CSV of hashes:
+      python download_from_VT.py folder_name --csv_file_name hashes.csv
+
+    To download a single file using a hash:
+      python download_from_VT.py  folder_name --single_hash <hash_value>
+    """
+)
 parser.add_argument('dest_folder_name', help='Name of folder to write to')
 parser.add_argument('--csv_file_name', help='CSV file you want to use')
 parser.add_argument('--single_hash', help='Single hash you want to download')
