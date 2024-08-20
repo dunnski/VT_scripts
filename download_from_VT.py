@@ -26,6 +26,7 @@ parser = argparse.ArgumentParser(
 
     To download a single file using a hash:
       python download_from_VT.py  folder_name --single_hash <hash_value>
+      
     """
 )
 parser.add_argument('dest_folder_name', help='Name of folder to write to')
