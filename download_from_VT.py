@@ -3,7 +3,7 @@ import csv
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from dotenv import load_dotenv
-import argparse  # Import the argparse library
+import argparse
 
 def load_api_keys():
     load_dotenv()
@@ -16,9 +16,10 @@ API_KEY = os.getenv("vti_api_key")
 API_URL = 'https://www.virustotal.com/api/v3/files/{}'
 
 # Parse command line arguments
-parser = argparse.ArgumentParser(description='Download files from VirusTotal based on a CSV of hashes.')
+parser = argparse.ArgumentParser(description='Download files from VirusTotal based on a CSV of hashes or a single hash.')
 parser.add_argument('dest_folder_name', help='Name of folder to write to')
-parser.add_argument('csv_file_name', help='CSV file you want to use')
+parser.add_argument('--csv_file_name', help='CSV file you want to use')
+parser.add_argument('--single_hash', help='Single hash you want to download')
 args = parser.parse_args()
 
 # Get the home directory of the current user
@@ -29,7 +30,8 @@ desktop_path = os.path.join(home_directory, 'Desktop')
 
 # Use the provided arguments for destination folder and CSV file
 dest_path = os.path.join(home_directory, args.dest_folder_name)
-CSV_FILE_PATH = os.path.join(desktop_path, args.csv_file_name)
+if args.csv_file_name:
+    CSV_FILE_PATH = os.path.join(desktop_path, args.csv_file_name)
 
 # Function to download a file from VirusTotal
 def download_file_from_virustotal(malware_name, file_hash):
@@ -67,4 +69,9 @@ def process_csv_and_download_files(csv_file_path):
 
 # Run the script
 if __name__ == "__main__":
-    process_csv_and_download_files(CSV_FILE_PATH)
+    if args.csv_file_name:
+        process_csv_and_download_files(CSV_FILE_PATH)
+    elif args.single_hash:
+        download_file_from_virustotal('single_hash', args.single_hash)
+    else:
+        print("Please provide either a CSV file or a single hash.")

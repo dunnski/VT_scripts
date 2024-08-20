@@ -2,6 +2,7 @@ import requests
 import datetime
 import os
 from dotenv import load_dotenv
+import urllib.parse
 
 def load_api_keys():
     load_dotenv()
@@ -23,13 +24,14 @@ def search_and_download(malware_families, file_types):
         if download_count >= 10:
             break  # Stop if we've reached 10 downloads
 
-        #query = f'engines:{family} AND type:{file_types}'
-        query = f'family_labels:{family} and type:{file_types}'
-        url = f'https://www.virustotal.com/api/v3/intelligence/search?query={query}'
+        # Ensure proper URL encoding for the query
+        query = f'{family} and type:{file_types}'
+        encoded_query = urllib.parse.quote(query)
+        url = f'https://www.virustotal.com/api/v3/intelligence/search?query={encoded_query}'
 
         response = requests.get(url, headers=HEADERS)
         if response.status_code == 200:
-            results = response.json()['data']
+            results = response.json().get('data', [])
             family_dir = os.path.join(parent_dir, family)
             os.makedirs(family_dir, exist_ok=True)
 
@@ -49,13 +51,13 @@ def search_and_download(malware_families, file_types):
                     print(f"Downloaded {file_id} to {file_path}")
                     download_count += 1  # Increment the counter after each download
                 else:
-                    print(f"Failed to download {file_id}")
+                    print(f"Failed to download {file_id}, Status Code: {download_response.status_code}")
         else:
-            print(f"Search failed for {family}\nStatus Code:{response.status_code}\n{response.content}")
+            print(f"Search failed for {family}\nStatus Code: {response.status_code}\n{response.content}")
 
     print(f"Total downloads: {download_count}")
 
 if __name__ == "__main__":
-    malware_families = ['emotet']  # Add more as needed
+    malware_families = ['redline']  # Add more as needed
     file_types = 'pe'  # Change to 'macho', 'elf', or other types as required
     search_and_download(malware_families, file_types)
