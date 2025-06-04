@@ -4,7 +4,7 @@ import subprocess
 # Get the home directory of the current user
 home_directory = os.path.expanduser('~')
 # Replace this with the directory you want to process
-directory_to_process = os.path.join(home_directory, 'Desktop/Crowdstrike_Efficacy_Test/Linux')
+directory_to_process = os.path.join(home_directory, 'Desktop/')
 
 def change_permissions_and_remove_quarantine(directory):
     for root, files in os.walk(directory):
