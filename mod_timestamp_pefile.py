@@ -8,7 +8,7 @@ home_directory = os.path.expanduser('~')
 # Construct the path to the desktop
 desktop_path = os.path.join(home_directory, 'Desktop')
 # ***Make sure you change the name of the destination folder you want to store files in***
-parent_folder_path = os.path.join(home_directory, 'Desktop/Crowdstrike_Efficacy_Test/')
+parent_folder_path = os.path.join(home_directory, 'Desktop/')
 
 def modify_pe_timestamp(file_path, output_file):
     try:
